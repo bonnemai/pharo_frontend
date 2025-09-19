@@ -19,7 +19,8 @@ export default function InstrumentTable2({rowData, darkMode, filter}: Instrument
       { headerName: "Price", field: "price", type: "rightAligned", width: 100,
         valueFormatter: p => valueFormatter(p.value) },
       { headerName: "P&L", field: "pnl", type: "rightAligned", width: 90,
-        valueFormatter: p => (p.value >= 0 ? `+${valueFormatter(p.value)}` : `${valueFormatter(p.value)}`) },
+        valueFormatter: p => (p.value >= 0 ? `+${valueFormatter(p.value)}` : `${valueFormatter(p.value)}`),
+        cellStyle: params => ({ color: params.value < 0 ? "#dc2626" : '' }) },
       { headerName: "Spark", field: "spark", cellRenderer: SparklineRenderer, filter: false, width: 150, suppressAutoSize: true, sortable: false },
     ],
     []
@@ -40,13 +41,16 @@ export default function InstrumentTable2({rowData, darkMode, filter}: Instrument
   return (
     <div className={`min-h-screen w-full p-6 ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-900"}`}>
       <div className="max-w-6xl mx-auto">
-        <div style={{ height: 520, width: "80%" }}>
+        <div style={{ height: 520, width: "100%" }}>
           <AgGridReact
             theme={theme}
             rowData={rowData}
             columnDefs={cols}
             defaultColDef={defaultColDef}
             animateRows={true}
+            pagination={true}
+            paginationPageSize={20}
+            paginationPageSizeSelector={[10, 20, 50, 100]}
             quickFilterText={filter}
           />
         </div>
@@ -62,4 +66,3 @@ function valueFormatter(value: number): string {
     maximumFractionDigits: 2,
   }).format(value);
 }
-
