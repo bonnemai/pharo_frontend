@@ -52,3 +52,4 @@ This will generate a `build` folder with the optimized production files.
 * Add Unit Tests
 * Migrate to vite? 
 * Why do we have duplicate tickers? 
+* Connect to the Backend? 
