@@ -9,12 +9,12 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "ag-grid-community": "^34.2.0",
+    "ag-grid-react": "^34.2.0",
     "antd": "^5.27.4",
-    "ag-grid-community": "^30.2.1",
-    "ag-grid-react": "^30.2.1",
     "chart.js": "^4.3.0",
-    "react-chartjs-2": "^5.2.0",
     "react": "^18.0.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.0.0",
     "react-scripts": "^5.0.1",
     "typescript": "^4.5.0"

@@ -1,6 +1,7 @@
 import React from 'react';
 
-const FilterPanel: React.FC<{ onFilterChange: (filter: string) => void }> = ({ onFilterChange }) => {
+// Not used
+function FilterPanel({ onFilterChange }: { onFilterChange: (filter: string) => void }) {
     const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         onFilterChange(event.target.value);
     };

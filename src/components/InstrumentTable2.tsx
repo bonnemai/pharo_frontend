@@ -1,27 +1,36 @@
 import { useMemo } from "react";
 import { AgGridReact } from "ag-grid-react";
-import { ColDef } from "ag-grid-community";
-import SparklineRenderer  from "./SparklineRenderer";
-import "ag-grid-community/styles/ag-grid.css";
+import { AllCommunityModule, ColDef, colorSchemeDark, colorSchemeLight, ModuleRegistry, themeQuartz } from "ag-grid-community";
+import SparklineRenderer from "./SparklineRenderer";
 import { Instrument } from "../types/Instrument";
 
-export default function InstrumentTable2({rowData, darkMode}: {rowData?: Instrument[], darkMode: boolean}) {
+ModuleRegistry.registerModules([ AllCommunityModule ]);
+
+export type InstrumentTable2Props = {
+  rowData?: Instrument[];
+  darkMode: boolean;
+  filter?: string;
+};
+
+export default function InstrumentTable2({rowData, darkMode, filter}: InstrumentTable2Props) {
   const cols = useMemo<ColDef[]>(
     () => [
       { headerName: "Symbol", field: "symbol", pinned: "left", width: 140 },
-      { headerName: "Price", field: "price", type: "rightAligned", width: 100 },
+      { headerName: "Price", field: "price", type: "rightAligned", width: 100,
+        valueFormatter: p => valueFormatter(p.value) },
       { headerName: "P&L", field: "pnl", type: "rightAligned", width: 90,
-        valueFormatter: p => (p.value >= 0 ? `+${p.value}` : `${p.value}`) },
-      { headerName: "Spark", field: "spark", cellRenderer: SparklineRenderer, width: 150, suppressAutoSize: true },
+        valueFormatter: p => (p.value >= 0 ? `+${valueFormatter(p.value)}` : `${valueFormatter(p.value)}`) },
+      { headerName: "Spark", field: "spark", cellRenderer: SparklineRenderer, filter: false, width: 150, suppressAutoSize: true, sortable: false },
     ],
     []
   );
-
+  console.log('Filter:', filter);
+  const theme=themeQuartz.withPart(darkMode?colorSchemeDark:colorSchemeLight);
   const defaultColDef = useMemo<ColDef>(
     () => ({
       sortable: true,
       resizable: true,
-      filter: true,
+      filter: false,
       flex: 1,
       minWidth: 80,
     }),
@@ -29,19 +38,28 @@ export default function InstrumentTable2({rowData, darkMode}: {rowData?: Instrum
   );
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 p-6">
+    <div className={`min-h-screen w-full p-6 ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-900"}`}>
       <div className="max-w-6xl mx-auto">
-        <div className="ag-theme-quartz" style={{ height: 520, width: "100%" }}>
+        <div style={{ height: 520, width: "80%" }}>
           <AgGridReact
-            chartThemes={[darkMode ? 'ag-pastel' : 'ag-default']}
+            theme={theme}
             rowData={rowData}
             columnDefs={cols}
             defaultColDef={defaultColDef}
             animateRows={true}
-            rowSelection="single"
+            quickFilterText={filter}
           />
         </div>
       </div>
     </div>
   );
+} 
+
+
+function valueFormatter(value: number): string {
+  return new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value);
 }
+

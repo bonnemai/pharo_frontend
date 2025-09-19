@@ -51,3 +51,4 @@ This will generate a `build` folder with the optimized production files.
 ### TODO
 * Add Unit Tests
 * Migrate to vite? 
+* Why do we have duplicate tickers? 

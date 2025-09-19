@@ -1,0 +1,6 @@
+// .eslintrc.json
+{
+  "rules": {
+    "func-style": ["error", "declaration", { "allowArrowFunctions": false }]
+  }
+}

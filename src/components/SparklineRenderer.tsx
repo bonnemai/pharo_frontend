@@ -29,12 +29,7 @@ export default class SparklineRenderer {
   }
 
   renderChart(params: ICellRendererParams) {
-    if (params) {
-      console.log("Rendering sparkline with params.value:", params, params.value);
-    }
-    const data: number[] = Array.isArray(params.data.sparkline as SparklineData)
-      ? params.data.sparkline.map((x: any) => typeof x === 'number' ? x : x.level)
-      : [];
+      const data: number[] = formatData(params.data.sparkline);
     if (!this.canvas) return;
 
     const gradient = this.canvas.getContext("2d")!.createLinearGradient(0, 0, 0, this.canvas.height);
@@ -84,9 +79,7 @@ export default class SparklineRenderer {
       this.renderChart(params);
       return true;
     }
-    const data: number[] = Array.isArray(params.value)
-      ? params.value.map((x: any) => typeof x === 'number' ? x : x.level)
-      : [];
+    const data: number[] = formatData(params.data.sparkline);
     this.chart.data.labels = data.map((_, i) => i + 1);
     this.chart.data.datasets[0].data = data as any;
     this.chart.update();
@@ -101,4 +94,11 @@ export default class SparklineRenderer {
     this.canvas = null;
     this.eGui = null;
   }
+
 }
+
+function formatData(sparkline: SparklineData[] | undefined): number[] {
+    return Array.isArray(sparkline)
+      ? sparkline.map((x: SparklineData) => x.level)
+      : [];
+  }
