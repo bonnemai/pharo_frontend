@@ -3,7 +3,7 @@ import 'antd/dist/reset.css';
 import './styles/App.css';
 import DarkModeToggle from './components/DarkModeToggle';
 import instrumentData from './resources/instruments.json';
-import InstrumentTable2 from './components/InstrumentTable2';
+import InstrumentTable from './components/InstrumentTable';
 import SearchBar from './components/SearchBar';
 
 function App() {
@@ -16,6 +16,7 @@ function App() {
 
   return (
     <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
+      <h1>Dashboard</h1>
       <div style={{
         display: 'flex',
         justifyContent: 'flex-end',
@@ -26,7 +27,7 @@ function App() {
         <DarkModeToggle darkMode={isDarkMode} onToggle={handleToggle} />
         <SearchBar onSearch={setFilter} />
       </div>
-      <InstrumentTable2
+      <InstrumentTable
         rowData={instrumentData}
         darkMode={isDarkMode}
         filter={filter}

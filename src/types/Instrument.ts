@@ -9,8 +9,4 @@ export interface Instrument {
     price: number;
     pnl: number;
     sparkline: SparklineData[]; // Array of price points for sparkline
-    // change: number; // Change in price
-    // percentageChange: number; // Percentage change
-    // volume: number; // Trading volume
-    // marketCap: number; // Market capitalization
 }
