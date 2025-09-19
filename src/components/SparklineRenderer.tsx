@@ -29,12 +29,21 @@ export default class SparklineRenderer {
   }
 
   renderChart(params: ICellRendererParams) {
-      const data: number[] = formatData(params.data.sparkline);
+    const data: number[] = formatData(params.data.sparkline);
     if (!this.canvas) return;
 
-    const gradient = this.canvas.getContext("2d")!.createLinearGradient(0, 0, 0, this.canvas.height);
-    gradient.addColorStop(0, "rgba(0, 0, 0, 0.35)");
-    gradient.addColorStop(1, "rgba(0, 0, 0, 0.02)");
+    const darkMode = params.context && params.context.darkMode;
+
+    const ctx = this.canvas.getContext("2d")!;
+    const gradient = ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+
+    if (darkMode) {
+      gradient.addColorStop(0, "rgba(250, 219, 20, 0.35)");
+      gradient.addColorStop(1, "rgba(250, 219, 20, 0.02)");
+    } else {
+      gradient.addColorStop(0, "rgba(0, 0, 0, 0.35)");
+      gradient.addColorStop(1, "rgba(0, 0, 0, 0.02)");
+    }
 
     // Destroy existing chart if any
     if (this.chart) {
@@ -54,6 +63,7 @@ export default class SparklineRenderer {
             pointRadius: 0,
             tension: 0.35,
             backgroundColor: gradient,
+            borderColor: darkMode ? "#fadb14" : "#1890ff", // <-- add this line
           },
         ],
       },
