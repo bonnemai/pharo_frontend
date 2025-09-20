@@ -15,7 +15,7 @@ function App() {
   }
 
   return (
-    <div className={isDarkMode ? 'dark-mode' : 'light-mode'}>
+    <div data-testid="app-root" className={isDarkMode ? 'dark-mode' : 'light-mode'}>
       <h1>Dashboard</h1>
       <div style={{
         display: 'flex',

@@ -20,8 +20,8 @@ Build a mini-dashboard application for portfolio monitoring with the following r
 
 ### Prerequisites
 
-- Node.js (version 14 or higher)
-- npm (version 6 or higher)
+- Node.js (version 18 or higher)
+- npm (version 9 or higher)
 
 ### Installation
    ```
@@ -33,10 +33,10 @@ Build a mini-dashboard application for portfolio monitoring with the following r
 To start the application in development mode, run:
 
 ```
-npm start
+npm run dev
 ```
 
-This will start the development server and open the application in your default web browser.
+The Vite development server runs on http://localhost:5173 by default. Use `npm start` (mapped to `vite dev --host 0.0.0.0 --port 3000`) when developing inside Docker or when the server must bind to all interfaces.
 
 ### Building for Production
 
@@ -46,10 +46,18 @@ To create a production build of the application, run:
 npm run build
 ```
 
-This will generate a `build` folder with the optimized production files.
+This will generate a `dist` folder with the optimized production files.
+
+### Previewing the Production Build
+
+```
+npm run preview
+```
+
+This serves the production build locally so you can validate the output.
 
 ### TODO
 * Add Unit Tests
-* Migrate to vite? 
-* Why do we have duplicate tickers? 
-* Connect to the Backend? 
+* Add linting and formatting rules
+* Why do we have duplicate tickers?
+* Connect to the Backend?
