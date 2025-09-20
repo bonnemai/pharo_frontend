@@ -42,6 +42,8 @@ The Vite development server runs on http://localhost:5173 by default. Use `npm s
 
 - `npm test` starts Vitest in watch mode.
 - `npm run test:run` runs the test suite once (used by the Docker build).
+- `npm run test:e2e` executes the Playwright end-to-end suite (run `npx playwright install` once to download browsers).
+- `npm run test:e2e:ui` opens the interactive Playwright UI for development and debugging.
 
 ### Building for Production
 
@@ -62,7 +64,6 @@ npm run preview
 This serves the production build locally so you can validate the output.
 
 ### TODO
-* Increase unit test coverage
 * Add linting and formatting rules
 * Why do we have duplicate tickers?
 * Connect to the Backend?
