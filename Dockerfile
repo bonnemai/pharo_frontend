@@ -3,7 +3,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY index.html vite.config.ts tsconfig.json playwright.config.ts ./
-COPY public ./public
 COPY src ./src
 COPY e2e ./e2e
 
