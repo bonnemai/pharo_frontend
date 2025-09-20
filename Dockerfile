@@ -5,5 +5,6 @@ RUN npm install
 COPY index.html vite.config.ts tsconfig.json ./
 COPY public ./public
 COPY src ./src
+RUN npm run test:run
 EXPOSE 3000
 CMD ["npm", "start"]

@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { vi, describe, expect, it } from 'vitest';
+import { vi, describe, expect, it, beforeEach } from 'vitest';
 import App from './App';
 
 vi.mock('ag-grid-react', () => ({
@@ -25,6 +25,11 @@ vi.mock('./components/SearchBar', () => ({
 }));
 
 describe('App', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    document.body.className = '';
+  });
+
   it('toggles theme when dark mode switch is activated', async () => {
     render(<App />);
     const root = screen.getByTestId('app-root');
@@ -35,13 +40,18 @@ describe('App', () => {
     await waitFor(() => expect(root).toHaveClass('dark-mode'));
   });
 
-  it.skip('passes search term to the grid quick filter', async () => {
+  it('passes search term to the grid quick filter', async () => {
     render(<App />);
-    const grid = screen.getByTestId('grid');
-    expect(grid).toHaveAttribute('data-quick-filter', '');
+    const initialGrids = screen.getAllByTestId('grid');
+    initialGrids.forEach(node => expect(node).toHaveAttribute('data-quick-filter', ''));
 
-    fireEvent.click(screen.getByTestId('search-trigger'));
+    fireEvent.click(screen.getAllByTestId('search-trigger')[0]);
 
-    await waitFor(() => expect(grid).toHaveAttribute('data-quick-filter', 'AAPL'));
+    await waitFor(() => {
+      const filters = screen
+        .getAllByTestId('grid')
+        .map(node => node.getAttribute('data-quick-filter'));
+      expect(filters).toContain('AAPL');
+    });
   });
 });

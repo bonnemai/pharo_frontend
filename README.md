@@ -38,6 +38,11 @@ npm run dev
 
 The Vite development server runs on http://localhost:5173 by default. Use `npm start` (mapped to `vite dev --host 0.0.0.0 --port 3000`) when developing inside Docker or when the server must bind to all interfaces.
 
+### Running Tests
+
+- `npm test` starts Vitest in watch mode.
+- `npm run test:run` runs the test suite once (used by the Docker build).
+
 ### Building for Production
 
 To create a production build of the application, run:
@@ -57,7 +62,7 @@ npm run preview
 This serves the production build locally so you can validate the output.
 
 ### TODO
-* Add Unit Tests
+* Increase unit test coverage
 * Add linting and formatting rules
 * Why do we have duplicate tickers?
 * Connect to the Backend?

@@ -13,6 +13,8 @@ describe('useDarkMode', () => {
 
     expect(result.current.isDarkMode).toBe(false);
 
+    await waitFor(() => expect(document.body.classList.contains('light-mode')).toBe(true));
+
     act(() => {
       result.current.toggleDarkMode();
     });
@@ -20,6 +22,7 @@ describe('useDarkMode', () => {
     await waitFor(() => expect(result.current.isDarkMode).toBe(true));
     await waitFor(() => expect(localStorage.getItem('dark-mode')).toBe('true'));
     await waitFor(() => expect(document.body.classList.contains('dark-mode')).toBe(true));
+    expect(document.body.classList.contains('light-mode')).toBe(false);
   });
 
   it('uses stored preference on initial load', async () => {
@@ -29,5 +32,6 @@ describe('useDarkMode', () => {
 
     await waitFor(() => expect(result.current.isDarkMode).toBe(true));
     await waitFor(() => expect(document.body.classList.contains('dark-mode')).toBe(true));
+    expect(document.body.classList.contains('light-mode')).toBe(false);
   });
 });

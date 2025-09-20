@@ -5,17 +5,17 @@ import DarkModeToggle from './components/DarkModeToggle';
 import instrumentData from './resources/instruments.json';
 import InstrumentTable from './components/InstrumentTable';
 import SearchBar from './components/SearchBar';
+import { useDarkMode } from './hooks/useDarkMode';
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [filter, setFilter] = useState('');
 
-  function handleToggle() {
-    setIsDarkMode((prev) => !prev);
-  }
-
   return (
-    <div data-testid="app-root" className={isDarkMode ? 'dark-mode' : 'light-mode'}>
+    <div
+      data-testid="app-root"
+      className={`app ${isDarkMode ? 'dark-mode' : 'light-mode'}`}
+    >
       <h1>Dashboard</h1>
       <div style={{
         display: 'flex',
@@ -24,7 +24,7 @@ function App() {
         gap: '1rem',
         marginBottom: '1rem'
       }}>
-        <DarkModeToggle darkMode={isDarkMode} onToggle={handleToggle} />
+        <DarkModeToggle darkMode={isDarkMode} onToggle={toggleDarkMode} />
         <SearchBar onSearch={setFilter} />
       </div>
       <InstrumentTable

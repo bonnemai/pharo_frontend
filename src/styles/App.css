@@ -1,9 +1,17 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
+    background-color: var(--background-color, #ffffff);
+    color: var(--text-color, #000000);
     transition: background-color 0.3s, color 0.3s;
+}
+
+.app {
+    min-height: 100vh;
+    background-color: var(--background-color, #ffffff);
+    color: var(--text-color, #000000);
+    transition: background-color 0.3s, color 0.3s;
+    padding: 2rem;
 }
 
 header {

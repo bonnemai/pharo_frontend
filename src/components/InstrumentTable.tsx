@@ -25,7 +25,6 @@ export default function InstrumentTable({rowData, darkMode, filter}: InstrumentT
     ],
     []
   );
-  console.log('Filter:', filter);
   const theme=themeQuartz.withPart(darkMode?colorSchemeDark:colorSchemeLight);
   const defaultColDef = useMemo<ColDef>(
     () => ({
