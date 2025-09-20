@@ -16,22 +16,20 @@ function App() {
       data-testid="app-root"
       className={`app ${isDarkMode ? 'dark-mode' : 'light-mode'}`}
     >
-      <h1>Dashboard</h1>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        gap: '1rem',
-        marginBottom: '1rem'
-      }}>
-        <DarkModeToggle darkMode={isDarkMode} onToggle={toggleDarkMode} />
-        <SearchBar onSearch={setFilter} darkMode={isDarkMode} />
-      </div>
-      <InstrumentTable
-        rowData={instrumentData}
-        darkMode={isDarkMode}
-        filter={filter}
-      />
+      <header className="app__toolbar">
+        <h1>Dashboard</h1>
+        <div className="app__controls">
+          <DarkModeToggle darkMode={isDarkMode} onToggle={toggleDarkMode} />
+          <SearchBar onSearch={setFilter} darkMode={isDarkMode} />
+        </div>
+      </header>
+      <main className="app__content">
+        <InstrumentTable
+          rowData={instrumentData}
+          darkMode={isDarkMode}
+          filter={filter}
+        />
+      </main>
     </div>
   );
 };

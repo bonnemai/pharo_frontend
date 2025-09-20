@@ -38,11 +38,12 @@ export default function InstrumentTable({rowData, darkMode, filter}: InstrumentT
   );
 
   return (
-    <div className={`min-h-screen w-full p-6 ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-900"}`}>
-      <div className="max-w-6xl mx-auto">
-        <div style={{ height: 520, width: "100%" }}>
+    <div className={`instrument-table ${darkMode ? 'instrument-table--dark' : 'instrument-table--light'}`}>
+      <div className="instrument-table__shell">
+        <div className="instrument-table__grid">
           <AgGridReact
             theme={theme}
+            className="instrument-table__aggrid"
             rowData={rowData}
             columnDefs={cols}
             defaultColDef={defaultColDef}
@@ -56,7 +57,7 @@ export default function InstrumentTable({rowData, darkMode, filter}: InstrumentT
       </div>
     </div>
   );
-} 
+}
 
 
 function valueFormatter(value: number): string {

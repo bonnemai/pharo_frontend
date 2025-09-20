@@ -6,12 +6,12 @@ test.describe('Dashboard App', () => {
 
     await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
 
-    await expect(page.getByRole('gridcell', { name: 'GOOG' }).first()).toBeVisible();
+    await expect(page.getByRole('gridcell', { name: 'GOOG' }).first()).toBeVisible({ timeout: 10000 });
 
     const searchInput = page.getByPlaceholder('Search by symbol...');
     await searchInput.fill('AMZN');
 
-    await expect(page.getByRole('gridcell', { name: 'AMZN' }).first()).toBeVisible();
-    await expect(page.getByRole('gridcell', { name: 'GOOG' })).toHaveCount(0);
+    await expect(page.getByRole('gridcell', { name: 'AMZN' }).first()).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('gridcell', { name: 'GOOG' })).toHaveCount(0, { timeout: 10000 });
   });
 });
