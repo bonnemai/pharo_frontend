@@ -8,7 +8,7 @@ Chart.register(CategoryScale, LinearScale, PointElement, LineElement, LineContro
 export default class SparklineRenderer {
   eGui: HTMLDivElement | null = null;
   canvas: HTMLCanvasElement | null = null;
-  chart: Chart | null = null;
+  chart: Chart<'line', number[]> | null = null;
 
   init(params: ICellRendererParams) {
     this.eGui = document.createElement("div");
@@ -51,10 +51,10 @@ export default class SparklineRenderer {
       this.chart = null;
     }
 
-    this.chart = new Chart(this.canvas, {
+    this.chart = new Chart<'line', number[]>(this.canvas, {
       type: "line",
       data: {
-        labels: data.map((_, i) => i + 1),
+        labels: data.map((_, i) => (i + 1).toString()),
         datasets: [
           {
             data,
@@ -63,7 +63,7 @@ export default class SparklineRenderer {
             pointRadius: 0,
             tension: 0.35,
             backgroundColor: gradient,
-            borderColor: darkMode ? "#fadb14" : "#1890ff", // <-- add this line
+            borderColor: darkMode ? "#fadb14" : "#1890ff",
           },
         ],
       },
@@ -90,8 +90,8 @@ export default class SparklineRenderer {
       return true;
     }
     const data: number[] = formatData(params.data.sparkline);
-    this.chart.data.labels = data.map((_, i) => i + 1);
-    this.chart.data.datasets[0].data = data as any;
+    this.chart.data.labels = data.map((_, i) => (i + 1).toString());
+    this.chart.data.datasets[0].data = data;
     this.chart.update();
     return true;
   }

@@ -25,7 +25,7 @@ function App() {
         marginBottom: '1rem'
       }}>
         <DarkModeToggle darkMode={isDarkMode} onToggle={toggleDarkMode} />
-        <SearchBar onSearch={setFilter} />
+        <SearchBar onSearch={setFilter} darkMode={isDarkMode} />
       </div>
       <InstrumentTable
         rowData={instrumentData}

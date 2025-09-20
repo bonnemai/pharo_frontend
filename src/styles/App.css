@@ -53,3 +53,41 @@ header {
     --text-color: #000000;
     --header-background: #f5f5f5;
 }
+
+.search-bar--dark .ant-input-affix-wrapper {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+}
+
+.search-bar--dark .ant-input-affix-wrapper:hover,
+.search-bar--dark .ant-input-affix-wrapper-focused {
+    border-color: #6366f1;
+}
+
+.search-bar--dark .ant-input,
+.search-bar--dark .ant-input-search-with-button .ant-input {
+    background-color: transparent;
+    color: inherit;
+}
+
+.search-bar--dark .ant-input::placeholder {
+    color: #9ca3af;
+}
+
+.search-bar--dark .ant-input-suffix,
+.search-bar--dark .ant-input-prefix {
+    color: #d1d5db;
+}
+
+.search-bar--dark .ant-input-search-button {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+}
+
+.search-bar--dark .ant-input-search-button:hover {
+    background-color: #2563eb;
+    border-color: #2563eb;
+    color: #f9fafb;
+}
