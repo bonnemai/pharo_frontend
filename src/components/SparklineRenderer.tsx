@@ -38,11 +38,13 @@ export default class SparklineRenderer {
     const gradient = ctx.createLinearGradient(0, 0, 0, this.canvas.height);
 
     if (darkMode) {
-      gradient.addColorStop(0, "rgba(250, 219, 20, 0.35)");
-      gradient.addColorStop(1, "rgba(250, 219, 20, 0.02)");
+      gradient.addColorStop(0, 'rgba(96, 165, 250, 0.55)');
+      gradient.addColorStop(0.6, 'rgba(96, 165, 250, 0.25)');
+      gradient.addColorStop(1, 'rgba(15, 23, 42, 0)');
     } else {
-      gradient.addColorStop(0, "rgba(0, 0, 0, 0.35)");
-      gradient.addColorStop(1, "rgba(0, 0, 0, 0.02)");
+      gradient.addColorStop(0, 'rgba(24, 144, 255, 0.4)');
+      gradient.addColorStop(0.6, 'rgba(24, 144, 255, 0.15)');
+      gradient.addColorStop(1, 'rgba(24, 144, 255, 0)');
     }
 
     // Destroy existing chart if any
@@ -63,7 +65,7 @@ export default class SparklineRenderer {
             pointRadius: 0,
             tension: 0.35,
             backgroundColor: gradient,
-            borderColor: darkMode ? "#fadb14" : "#1890ff",
+            borderColor: darkMode ? '#93c5fd' : '#1890ff',
           },
         ],
       },
