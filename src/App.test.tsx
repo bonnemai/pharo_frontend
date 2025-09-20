@@ -8,14 +8,6 @@ vi.mock('ag-grid-react', () => ({
   ),
 }));
 
-vi.mock('./components/DarkModeToggle', () => ({
-  default: ({ darkMode, onToggle }: { darkMode: boolean; onToggle: () => void }) => (
-    <button data-testid="dark-mode-toggle" data-dark={darkMode} onClick={onToggle}>
-      toggle
-    </button>
-  ),
-}));
-
 vi.mock('./components/SearchBar', () => ({
   default: ({ onSearch }: { onSearch: (value: string) => void }) => (
     <button data-testid="search-trigger" onClick={() => onSearch('AAPL')}>
@@ -35,7 +27,7 @@ describe('App', () => {
     const root = screen.getByTestId('app-root');
     expect(root).toHaveClass('light-mode');
 
-    fireEvent.click(screen.getByTestId('dark-mode-toggle'));
+    fireEvent.click(screen.getByText(/dark/i));
 
     await waitFor(() => expect(root).toHaveClass('dark-mode'));
   });

@@ -96,7 +96,7 @@ function mergeInstrumentRows(current: Instrument[], updates: Instrument[]): Inst
 }
 
 function App() {
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { isDarkMode, setDarkMode } = useDarkMode();
   const [filter, setFilter] = useState('');
   const [dataSource, setDataSource] = useState<DataSource>('json');
   const [tableData, setTableData] = useState<Instrument[]>(() => normaliseInstruments(instrumentData));
@@ -217,7 +217,7 @@ function App() {
       <header className="app__toolbar">
         <h1>Dashboard</h1>
         <div className="app__controls">
-          <DarkModeToggle darkMode={isDarkMode} onToggle={toggleDarkMode} />
+          <DarkModeToggle darkMode={isDarkMode} onChange={setDarkMode} />
           <SearchBar onSearch={setFilter} darkMode={isDarkMode} />
           <Radio.Group
             className="app__data-source"

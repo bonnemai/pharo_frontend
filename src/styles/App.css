@@ -52,30 +52,54 @@ body {
     background-color: transparent;
 }
 
-.dark-toggle {
-    display: flex;
-    align-items: center;
-    height: 36px;
-}
-
-.dark-toggle__switch {
-    height: 30px;
-}
-
-.dark-toggle__switch.ant-switch {
-    min-width: 80px;
-    border-radius: 999px;
+.mode-toggle {
     display: inline-flex;
     align-items: center;
+    border: none;
+    background: transparent;
+    gap: 0.5rem;
 }
 
-.dark-toggle__switch .ant-switch-handle {
-    top: 4px;
+.mode-toggle__button {
+    border-radius: 999px !important;
+    border: 1px solid rgba(148, 163, 184, 0.6) !important;
+    padding: 0.35rem 1.3rem;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: all 0.2s ease-in-out;
 }
 
-.dark-toggle__switch .ant-switch-inner {
-    font-weight: 500;
-    font-size: 0.85rem;
+.mode-toggle__button:not(:first-child)::before {
+    display: none;
+}
+
+.mode-toggle__button:not(:first-child) {
+    margin-left: 0.25rem;
+}
+
+.mode-toggle__button .mode-toggle__icon {
+    font-size: 0.95rem;
+    line-height: 1;
+}
+
+.mode-toggle__button .mode-toggle__label {
+    line-height: 1;
+}
+
+.mode-toggle__button:not(.ant-radio-button-wrapper-checked) {
+    background: linear-gradient(90deg, #e2e8f0, #cbd5f5);
+    color: #1f2937;
+}
+
+.mode-toggle__button.ant-radio-button-wrapper-checked {
+    background: linear-gradient(90deg, #2563eb, #60a5fa);
+    color: #ffffff;
+    border-color: #2563eb !important;
+    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.35);
 }
 
 .search-bar {
@@ -144,13 +168,18 @@ body {
     border-color: rgba(71, 85, 105, 0.8);
 }
 
-.dark-mode .dark-toggle__switch.ant-switch-checked {
-    background: linear-gradient(90deg, #2563eb, #60a5fa);
+.dark-mode .mode-toggle__button:not(.ant-radio-button-wrapper-checked) {
+    background: linear-gradient(90deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.85));
+    border-color: rgba(71, 85, 105, 0.75) !important;
+    color: #e2e8f0;
+    box-shadow: inset 0 1px 3px rgba(15, 23, 42, 0.35);
 }
 
-.dark-mode .dark-toggle__switch.ant-switch {
-    background-color: rgba(30, 41, 59, 0.65);
-    border: 1px solid rgba(71, 85, 105, 0.8);
+.dark-mode .mode-toggle__button.ant-radio-button-wrapper-checked {
+    background: linear-gradient(90deg, #2563eb, #60a5fa);
+    color: #ffffff;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.35);
 }
 
 .dark-mode .search-bar .ant-input-affix-wrapper:hover,
