@@ -7,8 +7,14 @@ type Props = {
 
 export default function DarkModeToggle({ darkMode, onToggle }: Props) {
   return (
-    <div style={{ marginBottom: 16 }}>
-      <Switch checked={darkMode} onChange={onToggle} checkedChildren="Dark" unCheckedChildren="Light" />
+    <div className="dark-toggle">
+      <Switch
+        checked={darkMode}
+        onChange={onToggle}
+        checkedChildren="Dark"
+        unCheckedChildren="Light"
+        className="dark-toggle__switch"
+      />
     </div>
   );
 }

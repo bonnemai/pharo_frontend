@@ -13,6 +13,7 @@ Build a mini-dashboard application for portfolio monitoring with the following r
 - **Portfolio Monitoring**: View a list of financial instruments with real-time data.
 - **Sorting and Filtering**: Easily sort and filter instruments based on various criteria.
 - **Search Functionality**: Search for instruments by symbol.
+- **Multiple Data Sources**: Switch between bundled JSON data, a REST API, or realtime SSE updates.
 - **Responsive Design**: The application is designed to work on various screen sizes.
 - **Dark Mode Toggle**: Switch between light and dark themes for better usability.
 
@@ -44,6 +45,7 @@ The Vite development server runs on http://localhost:5173 by default. Use `npm s
 - `npm run test:run` runs the test suite once (used by the Docker build).
 - `npm run test:e2e` executes the Playwright end-to-end suite (run `npx playwright install` once to download browsers).
 - `npm run test:e2e:ui` opens the interactive Playwright UI for development and debugging.
+- `npm run lint` runs ESLint against the source and end-to-end suites.
 
 ### Building for Production
 

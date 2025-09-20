@@ -20,8 +20,9 @@ function SearchBar({ onSearch, darkMode = false }: SearchBarProps) {
   const wrapperClass = darkMode ? 'search-bar search-bar--dark' : 'search-bar';
 
   return (
-    <div className={wrapperClass} style={{ marginBottom: 16, maxWidth: 400 }}>
+    <div className={wrapperClass}>
       <Search
+        className="search-bar__input"
         placeholder="Search by symbol..."
         value={searchTerm}
         onChange={handleChange}

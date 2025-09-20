@@ -1,9 +1,9 @@
 import { ICellRendererParams } from "ag-grid-community";
-import { Chart, CategoryScale, LinearScale, PointElement, LineElement, LineController } from "chart.js";
+import { Chart, CategoryScale, LinearScale, PointElement, LineElement, LineController, Filler } from "chart.js";
 import { SparklineData } from "types/Instrument";
 
-// Register required scales, elements, and controllers
-Chart.register(CategoryScale, LinearScale, PointElement, LineElement, LineController);
+// Register required scales, elements, controllers, and plugins
+Chart.register(CategoryScale, LinearScale, PointElement, LineElement, LineController, Filler);
 
 export default class SparklineRenderer {
   eGui: HTMLDivElement | null = null;
