@@ -1,0 +1,11 @@
+services:
+  backend:
+    image: ghcr.io/bonnemai/pharo_backend:latest@sha256:e2fa295c107afe9c6cb4c2e661c08e6985e1e11fb2758b73a0441188afe94115
+    ports:
+      - "3001:3000"
+  # frontend:
+  #   image: ghcr.io/bonnemai/pharo_frontend:latest
+  #   depends_on:
+  #     - backend
+  #   ports:
+  #     - "8001:80"
