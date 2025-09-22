@@ -6,6 +6,9 @@ COPY index.html vite.config.ts tsconfig.json playwright.config.ts ./
 COPY src ./src
 COPY e2e ./e2e
 
+FROM base AS lint
+RUN npm run lint
+
 FROM base AS unit-tests
 RUN npm run test:run
 
