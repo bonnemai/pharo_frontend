@@ -17,6 +17,8 @@ RUN npx playwright install --with-deps
 RUN npm run test:e2e
 
 FROM nginx:alpine AS runtime
+RUN apk add --no-cache curl
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 CMD curl -f http://localhost/ || exit 1
 CMD ["nginx", "-g", "daemon off;"]
