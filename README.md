@@ -8,6 +8,8 @@ Build a mini-dashboard application for portfolio monitoring with the following r
 *	Implement responsive UI for desktop and mobile.
 *	Add a dark mode toggle.
 
+![alt text](image.png)
+
 ## Features
 
 - **Portfolio Monitoring**: View a list of financial instruments with real-time data.
