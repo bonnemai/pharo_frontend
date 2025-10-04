@@ -69,5 +69,9 @@ This serves the production build locally so you can validate the output.
 
 ### TODO
 * Add linting and formatting rules
-* Why do we have duplicate tickers?
-* Connect to the Backend?
+
+# K8s
+Decide if either Service should be NodePort or LoadBalancer based on how you plan to access the apps outside the cluster.
+```
+kubectl apply --dry-run=client -f kubernetes.yaml.
+```
