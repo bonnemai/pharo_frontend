@@ -1,12 +1,34 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 declare const require: (id: string) => any;
 
-vi.mock('antd', () => {
-  const React = require('react');
+type RadioGroupChangeEvent = {
+  target: {
+    value: boolean;
+  };
+};
 
-  const RadioButton = ({ value, isSelected, onSelect, className, children }: any) => (
+type MockRadioButtonProps = {
+  value: boolean;
+  isSelected: boolean;
+  onSelect: (value: boolean) => void;
+  className?: string;
+  children: ReactNode;
+};
+
+type MockRadioGroupProps = HTMLAttributes<HTMLDivElement> & {
+  value: boolean;
+  onChange: (event: RadioGroupChangeEvent) => void;
+  optionType?: 'default' | 'button';
+  children: ReactNode;
+};
+
+vi.mock('antd', () => {
+  const React = require('react') as typeof import('react');
+
+  const RadioButton = ({ value, isSelected, onSelect, className, children }: MockRadioButtonProps) => (
     <button
       type="button"
       data-value={String(value)}
@@ -18,15 +40,19 @@ vi.mock('antd', () => {
     </button>
   );
 
-  const RadioGroup = ({ value, onChange, children, optionType: _optionType, ...rest }: any) => (
+  const RadioGroup = ({ value, onChange, children, optionType: _optionType, ...rest }: MockRadioGroupProps) => (
     <div data-value={String(value)} {...rest}>
-      {React.Children.map(children, child =>
-        React.cloneElement(child, {
+      {React.Children.map(children, child => {
+        if (!React.isValidElement<MockRadioButtonProps>(child)) {
+          return child;
+        }
+
+        return React.cloneElement(child, {
           ...child.props,
           isSelected: child.props.value === value,
           onSelect: (val: boolean) => onChange({ target: { value: val } }),
-        })
-      )}
+        });
+      })}
     </div>
   );
 
