@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import type { ForwardedRef, InputHTMLAttributes } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
-declare const require: (id: string) => any;
+declare function require<T = unknown>(id: string): T;
 
 type MockSearchProps = InputHTMLAttributes<HTMLInputElement> & {
   allowClear?: boolean;
@@ -12,10 +12,10 @@ vi.mock('antd', () => {
   const React = require('react') as typeof import('react');
 
   const Search = React.forwardRef<HTMLInputElement, MockSearchProps>(
-    (
-      { value, onChange, allowClear: _allowClear, ...rest }: MockSearchProps,
-      ref: ForwardedRef<HTMLInputElement>
-    ) => <input ref={ref} value={value} onChange={onChange} {...rest} />
+    ({ value, onChange, allowClear, ...rest }: MockSearchProps, ref: ForwardedRef<HTMLInputElement>) => {
+      void allowClear;
+      return <input ref={ref} value={value} onChange={onChange} {...rest} />;
+    }
   );
   Search.displayName = 'Search';
 

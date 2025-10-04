@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
-declare const require: (id: string) => any;
+declare function require<T = unknown>(id: string): T;
 
 type RadioGroupChangeEvent = {
   target: {
@@ -40,21 +40,24 @@ vi.mock('antd', () => {
     </button>
   );
 
-  const RadioGroup = ({ value, onChange, children, optionType: _optionType, ...rest }: MockRadioGroupProps) => (
-    <div data-value={String(value)} {...rest}>
-      {React.Children.map(children, child => {
-        if (!React.isValidElement<MockRadioButtonProps>(child)) {
-          return child;
-        }
+  const RadioGroup = ({ value, onChange, children, optionType, ...rest }: MockRadioGroupProps) => {
+    void optionType;
+    return (
+      <div data-value={String(value)} {...rest}>
+        {React.Children.map(children, child => {
+          if (!React.isValidElement<MockRadioButtonProps>(child)) {
+            return child;
+          }
 
-        return React.cloneElement(child, {
-          ...child.props,
-          isSelected: child.props.value === value,
-          onSelect: (val: boolean) => onChange({ target: { value: val } }),
-        });
-      })}
-    </div>
-  );
+          return React.cloneElement(child, {
+            ...child.props,
+            isSelected: child.props.value === value,
+            onSelect: (val: boolean) => onChange({ target: { value: val } }),
+          });
+        })}
+      </div>
+    );
+  };
 
   return {
     Radio: {

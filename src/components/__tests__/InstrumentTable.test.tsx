@@ -3,9 +3,17 @@ import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Instrument } from '../../types/Instrument';
 
-declare const require: (id: string) => any;
+declare function require<T = unknown>(id: string): T;
 
-let lastAgGridProps: any;
+type MockAgGridProps = {
+  quickFilterText?: string;
+  rowData?: unknown[];
+  pagination?: boolean;
+  paginationPageSize?: number;
+  columnDefs?: unknown[];
+};
+
+let lastAgGridProps: MockAgGridProps | undefined;
 
 vi.mock('ag-grid-community', () => ({
   AllCommunityModule: { moduleName: 'all' },
@@ -23,13 +31,14 @@ vi.mock('ag-grid-react', () => {
   const React = require('react');
 
   return {
-    AgGridReact: (props: any) => {
+    AgGridReact: (props: MockAgGridProps) => {
       lastAgGridProps = props;
+      const rowCount = Array.isArray(props.rowData) ? props.rowData.length : 0;
       return (
         <div
           data-testid="ag-grid"
           data-quick-filter={props.quickFilterText ?? ''}
-          data-row-count={Array.isArray(props.rowData) ? props.rowData.length : 0}
+          data-row-count={rowCount}
         />
       );
     },
