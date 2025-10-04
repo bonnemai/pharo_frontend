@@ -1,4 +1,6 @@
 FROM node:24 AS base
+ARG VITE_API_HOST=https://mfzznc3aac4ed2sjkrvm2ctqje0iukdd.lambda-url.eu-west-2.on.aws
+ENV VITE_API_HOST=${VITE_API_HOST}
 WORKDIR /app
 COPY package*.json ./
 RUN npm install

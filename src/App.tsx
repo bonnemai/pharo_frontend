@@ -8,10 +8,9 @@ import InstrumentTable from './components/InstrumentTable';
 import SearchBar from './components/SearchBar';
 import { useDarkMode } from './hooks/useDarkMode';
 import { Instrument, SparklineData } from './types/Instrument';
+import { API_HOST } from './config/api';
 
 type DataSource = 'json' | 'api' | 'sse';
-
-const API_HOST = (import.meta.env.VITE_API_HOST ?? 'https://mfzznc3aac4ed2sjkrvm2ctqje0iukdd.lambda-url.eu-west-2.on.aws').replace(/\/$/, '');
 
 const DATA_SOURCE_OPTIONS = [
   { label: 'Mock JSON', value: 'json' as const },

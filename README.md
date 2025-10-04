@@ -41,6 +41,17 @@ npm run dev
 
 The Vite development server runs on http://localhost:5173 by default. Use `npm start` (mapped to `vite dev --host 0.0.0.0 --port 3000`) when developing inside Docker or when the server must bind to all interfaces.
 
+### Configuring the Backend Host
+
+The frontend reads the backend base URL from the `VITE_API_HOST` environment variable. Duplicate the sample file and customise it for your environment:
+
+```
+cp .env.example .env
+echo "VITE_API_HOST=http://localhost:8001" >> .env
+```
+
+When running `npm run dev` the app defaults to `http://localhost:8001` if the variable is not set. Docker builds bake in `https://mfzznc3aac4ed2sjkrvm2ctqje0iukdd.lambda-url.eu-west-2.on.aws` by default, and you can override it by passing `--build-arg VITE_API_HOST=https://api.example.com` when building your image.
+
 ### Running Tests
 
 - `npm test` starts Vitest in watch mode.
