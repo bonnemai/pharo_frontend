@@ -10,12 +10,11 @@ import { useDarkMode } from './hooks/useDarkMode';
 import { Instrument, SparklineData } from './types/Instrument';
 import { API_HOST } from './config/api';
 
-type DataSource = 'json' | 'api' | 'sse';
+type DataSource = 'json' | 'api';
 
 const DATA_SOURCE_OPTIONS = [
   { label: 'Mock JSON', value: 'json' as const },
-  { label: 'REST API', value: 'api' as const },
-  { label: 'Realtime SSE', value: 'sse' as const },
+  { label: 'REST API (live)', value: 'api' as const },
 ];
 
 function toNumber(value: unknown): number | null {
@@ -82,18 +81,6 @@ function normaliseInstruments(payload: unknown): Instrument[] {
     .filter((item): item is Instrument => Boolean(item));
 }
 
-function mergeInstrumentRows(current: Instrument[], updates: Instrument[]): Instrument[] {
-  if (updates.length === 0) return current;
-  const map = new Map<number, Instrument>();
-  current.forEach(entry => {
-    map.set(entry.id, entry);
-  });
-  updates.forEach(entry => {
-    map.set(entry.id, entry);
-  });
-  return Array.from(map.values());
-}
-
 function App() {
   const { isDarkMode, setDarkMode } = useDarkMode();
   const [filter, setFilter] = useState('');
@@ -104,9 +91,7 @@ function App() {
 
   useEffect(() => {
     let cancelled = false;
-    let eventSource: EventSource | null = null;
-    let hasReceivedRealtimeData = false;
-    let reconnectInterval: ReturnType<typeof setInterval> | null = null;
+    let pollInterval: ReturnType<typeof setInterval> | null = null;
     const controller = new AbortController();
 
     const replaceData = (next: Instrument[]) => {
@@ -140,7 +125,7 @@ function App() {
     setError(null);
 
     if (dataSource === 'api') {
-      (async () => {
+      const fetchData = async () => {
         try {
           const response = await fetch(`${API_HOST}/api/instruments`, {
             signal: controller.signal,
@@ -156,76 +141,27 @@ function App() {
           applyError('Unable to load instruments from API.');
           finishLoading();
         }
-      })();
-    }
+      };
 
-    if (dataSource === 'sse') {
-      if (typeof EventSource === 'undefined') {
-        applyError('Server Sent Events are not supported in this environment.');
-        finishLoading();
-      } else {
-        const connectSSE = () => {
-          if (eventSource) {
-            eventSource.close();
-          }
+      // Fetch immediately
+      fetchData();
 
-          eventSource = new EventSource(`${API_HOST}/api/instruments/realtime`);
-          const handlePayload = (event: MessageEvent) => {
-            try {
-              const payload = JSON.parse(event.data);
-              const updates = normaliseInstruments(payload);
-              if (updates.length > 0) {
-                setTableData(prev => mergeInstrumentRows(prev, updates));
-                hasReceivedRealtimeData = true;
-                setError(null);
-                setLoading(false);
-              }
-            } catch {
-              applyError('Received malformed realtime payload.');
-              finishLoading();
-            }
-          };
-
-          eventSource.addEventListener('upsert', handlePayload);
-          eventSource.onmessage = handlePayload;
-          eventSource.addEventListener('ping', () => {
-            if (!cancelled && hasReceivedRealtimeData) {
-              setError(null);
-            }
-          });
-          eventSource.onerror = () => {
-            applyError('Realtime connection interrupted.');
-            finishLoading();
-            if (eventSource) {
-              eventSource.close();
-            }
-          };
-        };
-
-        connectSSE();
-
-        // Reconnect every 20 seconds
-        reconnectInterval = setInterval(() => {
-          if (!cancelled) {
-            connectSSE();
-          }
-        }, 20000);
-      }
+      // Then poll every second
+      pollInterval = setInterval(() => {
+        if (!cancelled) {
+          fetchData();
+        }
+      }, 1000);
     }
 
     return () => {
       cancelled = true;
       controller.abort();
-      if (eventSource) {
-        eventSource.close();
-      }
-      if (reconnectInterval) {
-        clearInterval(reconnectInterval);
+      if (pollInterval) {
+        clearInterval(pollInterval);
       }
     };
   }, [dataSource]);
-
-  const isRealtime = dataSource === 'sse';
 
   return (
     <div
@@ -253,7 +189,7 @@ function App() {
               className={`app__status ${loading ? 'app__status--loading' : 'app__status--error'}`}
               role="status"
             >
-              {loading ? (isRealtime ? 'Listening for realtime data…' : 'Loading instruments…') : error}
+              {loading ? 'Loading instruments…' : error}
             </div>
           )}
           <InstrumentTable

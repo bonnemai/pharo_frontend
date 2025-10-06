@@ -4,7 +4,7 @@ test.describe('Dashboard App', () => {
   test('renders instruments and filters by symbol', async ({ page }) => {
     await page.goto('/');
 
-    await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
+    await expect(page.getByTestId('app-root').getByRole('heading', { name: 'Dashboard' })).toBeVisible();
 
     await expect(page.getByRole('gridcell', { name: 'GOOG' }).first()).toBeVisible({ timeout: 10000 });
 
