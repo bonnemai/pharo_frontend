@@ -99,6 +99,8 @@ jobs:
 
       - name: Build static assets
         run: npm run build
+        env:
+          VITE_API_HOST: https://mfzznc3aac4ed2sjkrvm2ctqje0iukdd.lambda-url.eu-west-2.on.aws
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
