@@ -106,6 +106,7 @@ function App() {
     let cancelled = false;
     let eventSource: EventSource | null = null;
     let hasReceivedRealtimeData = false;
+    let reconnectInterval: ReturnType<typeof setInterval> | null = null;
     const controller = new AbortController();
 
     const replaceData = (next: Instrument[]) => {
@@ -163,37 +164,52 @@ function App() {
         applyError('Server Sent Events are not supported in this environment.');
         finishLoading();
       } else {
-        eventSource = new EventSource(`${API_HOST}/api/instruments/realtime`);
-        const handlePayload = (event: MessageEvent) => {
-          try {
-            const payload = JSON.parse(event.data);
-            const updates = normaliseInstruments(payload);
-            if (updates.length > 0) {
-              setTableData(prev => mergeInstrumentRows(prev, updates));
-              hasReceivedRealtimeData = true;
-              setError(null);
-              setLoading(false);
-            }
-          } catch {
-            applyError('Received malformed realtime payload.');
-            finishLoading();
-          }
-        };
-
-        eventSource.addEventListener('upsert', handlePayload);
-        eventSource.onmessage = handlePayload;
-        eventSource.addEventListener('ping', () => {
-          if (!cancelled && hasReceivedRealtimeData) {
-            setError(null);
-          }
-        });
-        eventSource.onerror = () => {
-          applyError('Realtime connection interrupted.');
-          finishLoading();
+        const connectSSE = () => {
           if (eventSource) {
             eventSource.close();
           }
+
+          eventSource = new EventSource(`${API_HOST}/api/instruments/realtime`);
+          const handlePayload = (event: MessageEvent) => {
+            try {
+              const payload = JSON.parse(event.data);
+              const updates = normaliseInstruments(payload);
+              if (updates.length > 0) {
+                setTableData(prev => mergeInstrumentRows(prev, updates));
+                hasReceivedRealtimeData = true;
+                setError(null);
+                setLoading(false);
+              }
+            } catch {
+              applyError('Received malformed realtime payload.');
+              finishLoading();
+            }
+          };
+
+          eventSource.addEventListener('upsert', handlePayload);
+          eventSource.onmessage = handlePayload;
+          eventSource.addEventListener('ping', () => {
+            if (!cancelled && hasReceivedRealtimeData) {
+              setError(null);
+            }
+          });
+          eventSource.onerror = () => {
+            applyError('Realtime connection interrupted.');
+            finishLoading();
+            if (eventSource) {
+              eventSource.close();
+            }
+          };
         };
+
+        connectSSE();
+
+        // Reconnect every 20 seconds
+        reconnectInterval = setInterval(() => {
+          if (!cancelled) {
+            connectSSE();
+          }
+        }, 20000);
       }
     }
 
@@ -202,6 +218,9 @@ function App() {
       controller.abort();
       if (eventSource) {
         eventSource.close();
+      }
+      if (reconnectInterval) {
+        clearInterval(reconnectInterval);
       }
     };
   }, [dataSource]);
