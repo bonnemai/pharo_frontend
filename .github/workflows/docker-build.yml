@@ -110,3 +110,63 @@ jobs:
 
       - name: Deploy to S3
         run: aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET }}/ --delete
+
+  deploy-to-amplify:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    needs:
+      - tests
+    permissions:
+      contents: read
+      id-token: write
+    environment: prd
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static assets
+        run: npm run build
+        env:
+          VITE_API_HOST: https://mfzznc3aac4ed2sjkrvm2ctqje0iukdd.lambda-url.eu-west-2.on.aws
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_PRD_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to Amplify
+        run: |
+          # Create deployment and get upload URL
+          DEPLOYMENT=$(aws amplify create-deployment \
+            --app-id ${{ secrets.AMPLIFY_APP_ID }} \
+            --branch-name main \
+            --output json)
+
+          UPLOAD_URL=$(echo $DEPLOYMENT | jq -r '.zipUploadUrl')
+          JOB_ID=$(echo $DEPLOYMENT | jq -r '.jobId')
+
+          # Zip and upload build artifacts
+          cd dist
+          zip -r ../build.zip .
+          cd ..
+
+          curl -X PUT "$UPLOAD_URL" \
+            --data-binary @build.zip \
+            --header "Content-Type: application/zip"
+
+          # Start the deployment
+          aws amplify start-deployment \
+            --app-id ${{ secrets.AMPLIFY_APP_ID }} \
+            --branch-name main \
+            --job-id $JOB_ID
